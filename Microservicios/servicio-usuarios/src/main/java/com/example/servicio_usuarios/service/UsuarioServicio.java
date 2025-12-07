@@ -1,13 +1,13 @@
-package com.example.servicio_usuarios.service; // La carpeta es 'service'
+package com.example.servicio_usuarios.service;
 
 import com.example.servicio_usuarios.model.Usuario;
-import com.example.servicio_usuarios.repository.UsuarioRepositorio; // Importamos la clase en español del paquete repository
+import com.example.servicio_usuarios.repository.UsuarioRepositorio;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioServicio { // El nombre de clase coincide con el archivo
+public class UsuarioServicio {
 
     private final UsuarioRepositorio usuarioRepositorio;
 
@@ -21,6 +21,11 @@ public class UsuarioServicio { // El nombre de clase coincide con el archivo
 
     public Optional<Usuario> encontrarPorId(Long id) {
         return usuarioRepositorio.findById(id);
+    }
+
+
+    public Usuario obtenerPorEmail(String email) {
+        return usuarioRepositorio.findByEmail(email);
     }
 
     public Usuario guardar(Usuario usuario) {

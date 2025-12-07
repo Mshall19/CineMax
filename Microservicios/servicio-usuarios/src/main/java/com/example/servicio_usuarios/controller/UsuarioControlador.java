@@ -1,7 +1,7 @@
-package com.example.servicio_usuarios.controller; // La carpeta es 'controller'
+package com.example.servicio_usuarios.controller;
 
 import com.example.servicio_usuarios.model.Usuario;
-import com.example.servicio_usuarios.service.UsuarioServicio; // Importamos el servicio en español
+import com.example.servicio_usuarios.service.UsuarioServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioControlador { // Nombre coincide con el archivo
+public class UsuarioControlador {
 
     private final UsuarioServicio usuarioServicio;
 
