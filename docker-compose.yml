@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Base de datos 1: USUARIOS (Puerto 5432)
   db_usuarios:
     image: postgres:14-alpine
     container_name: db_usuarios
@@ -14,5 +15,20 @@ services:
     volumes:
       - ./data/db_usuarios:/var/lib/postgresql/data
 
+  # Base de datos 2: PELICULAS (Puerto 5433 - NUEVA)
+  db_peliculas:
+    image: postgres:14-alpine
+    container_name: db_peliculas
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: db_cinemax_peliculas
+    ports:
+      - "5433:5432"  # <--- Fíjate que usa el 5433 afuera
+    volumes:
+      - ./data/db_peliculas:/var/lib/postgresql/data
+
 volumes:
   db_usuarios_data:
+  db_peliculas_data:

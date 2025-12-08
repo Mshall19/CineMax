@@ -4,13 +4,10 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/Microservicios/servicio-proyecciones/pom.xml" />
-        <option value="$PROJECT_DIR$/Microservicios/servicio-reservas/pom.xml" />
         <option value="$PROJECT_DIR$/Microservicios/servicio-usuarios/pom.xml" />
+        <option value="$PROJECT_DIR$/Microservicios/servicio-peliculas/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="openjdk-24 (2)" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-24 (2)" project-jdk-type="JavaSDK" />
 </project>
