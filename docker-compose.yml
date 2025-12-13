@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Base de datos 1: USUARIOS (Puerto 5432)
+  # Base de datos 1: USUARIOS y RESERVAS (Puerto 5432)
   db_usuarios:
     image: postgres:14-alpine
     container_name: db_usuarios
@@ -13,9 +13,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/db_usuarios:/var/lib/postgresql/data
+      - db_usuarios_data:/var/lib/postgresql/data
+    networks:
+      - cinemax-network
 
-  # Base de datos 2: PELICULAS (Puerto 5433 - NUEVA)
+  # Base de datos 2: PELICULAS (Puerto 5433)
   db_peliculas:
     image: postgres:14-alpine
     container_name: db_peliculas
@@ -25,10 +27,16 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: db_cinemax_peliculas
     ports:
-      - "5433:5432"  # <--- Fíjate que usa el 5433 afuera
+      - "5433:5432"
     volumes:
-      - ./data/db_peliculas:/var/lib/postgresql/data
+      - db_peliculas_data:/var/lib/postgresql/data
+    networks:
+      - cinemax-network
 
 volumes:
   db_usuarios_data:
   db_peliculas_data:
+
+networks:
+  cinemax-network:
+    driver: bridge
