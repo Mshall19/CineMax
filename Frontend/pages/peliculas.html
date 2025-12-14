@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Películas - CineMax</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn-add {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: var(--hover-color);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-info {
+            color: #cccccc;
+            margin: 0.5rem 0;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #ffa500;
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #cccccc;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🎬 CineMax</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Películas</a></li>
+        <li><a href="reservas.html">Reservas</a></li>
+        <li><a href="usuarios.html">Usuarios</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="page-header">
+        <h1>🎬 Cartelera de Películas</h1>
+        <button class="btn-add" onclick="openModal()">+ Agregar Película</button>
+    </div>
+
+    <div id="moviesGrid" class="movies-grid"></div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Nueva Película</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+
+        <form id="movieForm">
+            <input type="hidden" id="movieId">
+
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="titulo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Director</label>
+                <input type="text" id="director" required>
+            </div>
+
+            <div class="form-group">
+                <label>Género</label>
+                <input type="text" id="genero" required>
+            </div>
+
+            <button type="submit" class="btn-add" style="width: 100%;">Guardar</button>
+        </form>
+    </div>
+</div>
+
+<script src="../assets/js/api.js"></script>
+<script>
+    let peliculas = [];
+
+    // Cargar películas al iniciar
+    window.addEventListener('DOMContentLoaded', cargarPeliculas);
+
+    async function cargarPeliculas() {
+        try {
+            peliculas = await API.peliculas.getAll();
+            renderPeliculas();
+        } catch (error) {
+            console.error('Error cargando películas:', error);
+        }
+    }
+
+    function renderPeliculas() {
+        const grid = document.getElementById('moviesGrid');
+        grid.innerHTML = peliculas.map(p => `
+                <div class="movie-card">
+                    <h3>🎥 ${p.titulo}</h3>
+                    <p class="movie-info"><strong>Director:</strong> ${p.director}</p>
+                    <p class="movie-info"><strong>Género:</strong> ${p.genero}</p>
+                    <div class="movie-actions">
+                        <button class="btn-edit" onclick="editarPelicula(${p.id})">Editar</button>
+                        <button class="btn-delete" onclick="eliminarPelicula(${p.id})">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    function openModal(pelicula = null) {
+        const modal = document.getElementById('modal');
+        const form = document.getElementById('movieForm');
+
+        if (pelicula) {
+            document.getElementById('modalTitle').textContent = 'Editar Película';
+            document.getElementById('movieId').value = pelicula.id;
+            document.getElementById('titulo').value = pelicula.titulo;
+            document.getElementById('director').value = pelicula.director;
+            document.getElementById('genero').value = pelicula.genero;
+        } else {
+            document.getElementById('modalTitle').textContent = 'Nueva Película';
+            form.reset();
+        }
+
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    document.getElementById('movieForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const pelicula = {
+            titulo: document.getElementById('titulo').value,
+            director: document.getElementById('director').value,
+            genero: document.getElementById('genero').value
+        };
+
+        const id = document.getElementById('movieId').value;
+
+        try {
+            if (id) {
+                await API.peliculas.update(id, pelicula);
+            } else {
+                await API.peliculas.create(pelicula);
+            }
+
+            closeModal();
+            cargarPeliculas();
+        } catch (error) {
+            console.error('Error guardando película:', error);
+            alert('Error al guardar la película');
+        }
+    });
+
+    async function editarPelicula(id) {
+        const pelicula = peliculas.find(p => p.id === id);
+        openModal(pelicula);
+    }
+
+    async function eliminarPelicula(id) {
+        if (confirm('¿Estás seguro de eliminar esta película?')) {
+            try {
+                await API.peliculas.delete(id);
+                cargarPeliculas();
+            } catch (error) {
+                console.error('Error eliminando película:', error);
+            }
+        }
+    }
+</script>
+</body>
+</html>

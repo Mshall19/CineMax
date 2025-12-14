@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas - CineMax</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .reservas-table {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .reservas-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .reservas-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .reservas-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .reservas-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-reserva {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🎬 CineMax</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Películas</a></li>
+        <li><a href="reservas.html">Reservas</a></li>
+        <li><a href="usuarios.html">Usuarios</a></li>
+    </ul>
+</nav>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="page-header">
+        <h1>🎟️ Gestión de Reservas</h1>
+    </div>
+
+    <!-- FORMULARIO NUEVA RESERVA -->
+    <div class="form-reserva">
+        <h2>Nueva Reserva</h2>
+        <form id="reservaForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <select id="idUsuario" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label>Película</label>
+                    <select id="idPelicula" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label>Precio Total</label>
+                    <input type="number" id="precioTotal" step="0.01" value="15000" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-add">Crear Reserva</button>
+        </form>
+    </div>
+
+    <!-- TABLA DE RESERVAS -->
+    <div class="reservas-table">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Película</th>
+                <th>Fecha</th>
+                <th>Precio</th>
+            </tr>
+            </thead>
+            <tbody id="reservasBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="../assets/js/api.js"></script>
+<script>
+    let usuarios = [];
+    let peliculas = [];
+    let reservas = [];
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        await cargarDatos();
+        cargarReservas();
+    });
+
+    async function cargarDatos() {
+        try {
+            usuarios = await API.usuarios.getAll();
+            peliculas = await API.peliculas.getAll();
+
+            // Llenar select de usuarios
+            const selectUsuarios = document.getElementById('idUsuario');
+            selectUsuarios.innerHTML = usuarios.map(u =>
+                `<option value="${u.id}">${u.nombre} (${u.email})</option>`
+            ).join('');
+
+            // Llenar select de películas
+            const selectPeliculas = document.getElementById('idPelicula');
+            selectPeliculas.innerHTML = peliculas.map(p =>
+                `<option value="${p.id}">${p.titulo}</option>`
+            ).join('');
+        } catch (error) {
+            console.error('Error cargando datos:', error);
+        }
+    }
+
+    async function cargarReservas() {
+        try {
+            reservas = await API.reservas.getAll();
+            renderReservas();
+        } catch (error) {
+            console.error('Error cargando reservas:', error);
+        }
+    }
+
+    function renderReservas() {
+        const tbody = document.getElementById('reservasBody');
+        tbody.innerHTML = reservas.map(r => {
+            const usuario = usuarios.find(u => u.id === r.idUsuario);
+            const pelicula = peliculas.find(p => p.id === r.idPelicula);
+
+            return `
+                    <tr>
+                        <td>${r.id}</td>
+                        <td>${usuario ? usuario.nombre : 'N/A'}</td>
+                        <td>${pelicula ? pelicula.titulo : 'N/A'}</td>
+                        <td>${new Date(r.fechaReserva).toLocaleString()}</td>
+                        <td>$${r.precioTotal.toLocaleString()}</td>
+                    </tr>
+                `;
+        }).join('');
+    }
+
+    document.getElementById('reservaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const reserva = {
+            idUsuario: parseInt(document.getElementById('idUsuario').value),
+            idPelicula: parseInt(document.getElementById('idPelicula').value),
+            precioTotal: parseFloat(document.getElementById('precioTotal').value)
+        };
+
+        try {
+            await API.reservas.create(reserva);
+            alert('Reserva creada exitosamente');
+            cargarReservas();
+        } catch (error) {
+            console.error('Error creando reserva:', error);
+            alert('Error al crear la reserva');
+        }
+    });
+</script>
+</body>
+</html>

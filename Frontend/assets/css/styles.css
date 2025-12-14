@@ -1,0 +1,484 @@
+/* ===================================
+   VARIABLES Y RESET
+=================================== */
+:root {
+    --primary-color: #E50914;
+    --hover-color: #b8070f;
+    --bg-dark: #141414;
+    --bg-card: #1a1a1a;
+    --text-light: #ffffff;
+    --text-gray: #cccccc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* ===================================
+   NAVBAR
+=================================== */
+.navbar {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+.btn-login {
+    background: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+}
+
+.btn-login:hover {
+    background: var(--hover-color);
+}
+
+/* ===================================
+   HERO SECTION
+=================================== */
+.hero {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #141414 0%, #1a1a1a 100%);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    color: var(--text-gray);
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.cta-button:hover {
+    background: var(--hover-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(229, 9, 20, 0.4);
+}
+
+/* ===================================
+   STATS SECTION
+=================================== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: var(--text-gray);
+}
+
+/* ===================================
+   FEATURES SECTION
+=================================== */
+.features {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--primary-color);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: var(--text-gray);
+}
+
+/* ===================================
+   CONTAINERS Y PÁGINAS
+=================================== */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    color: var(--primary-color);
+}
+
+/* ===================================
+   BOTONES
+=================================== */
+.btn-add {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-add:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+.btn-edit {
+    background: #ffa500;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-edit:hover {
+    background: #ff8c00;
+}
+
+.btn-delete {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-delete:hover {
+    background: var(--hover-color);
+}
+
+/* ===================================
+   GRIDS DE PELÍCULAS
+=================================== */
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.movie-info {
+    color: var(--text-gray);
+    margin: 0.5rem 0;
+}
+
+.movie-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ===================================
+   TABLAS
+=================================== */
+.reservas-table,
+.usuarios-table {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.reservas-table table,
+.usuarios-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reservas-table th,
+.usuarios-table th {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+}
+
+.reservas-table td,
+.usuarios-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reservas-table tr:hover,
+.usuarios-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===================================
+   FORMULARIOS
+=================================== */
+.form-reserva {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 5px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* ===================================
+   BADGES
+=================================== */
+.badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.badge-admin {
+    background: #ffa500;
+    color: white;
+}
+
+.badge-user {
+    background: #4CAF50;
+    color: white;
+}
+
+/* ===================================
+   MODAL
+=================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close {
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-gray);
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+/* ===================================
+   FOOTER
+=================================== */
+.footer {
+    background: rgba(20, 20, 20, 0.95);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+    color: var(--text-gray);
+}
+
+.footer code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    color: var(--primary-color);
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

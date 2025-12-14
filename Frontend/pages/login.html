@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CineMax</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: var(--hover-color);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: #cccccc;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .alert-error {
+            background: rgba(229, 9, 20, 0.2);
+            border: 1px solid var(--primary-color);
+            color: white;
+        }
+
+        .alert-success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🎬 CineMax</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Películas</a></li>
+    </ul>
+</nav>
+
+<!-- LOGIN FORM -->
+<div class="login-container">
+    <div class="login-header">
+        <h2>🎬 Iniciar Sesión</h2>
+        <p>Bienvenido de nuevo</p>
+    </div>
+
+    <div id="alert" class="alert"></div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Iniciar Sesión</button>
+    </form>
+
+    <div class="register-link">
+        ¿No tienes cuenta? <a href="usuarios.html">Regístrate aquí</a>
+    </div>
+</div>
+
+<script src="../assets/js/api.js"></script>
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const alertDiv = document.getElementById('alert');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // Buscar usuario por email
+            const usuarios = await API.usuarios.getAll();
+            const usuario = usuarios.find(u => u.email === email && u.password === password);
+
+            if (usuario) {
+                showAlert('¡Login exitoso! Redirigiendo...', 'success');
+
+                // Guardar sesión (simulado)
+                localStorage.setItem('usuario', JSON.stringify(usuario));
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showAlert('Credenciales incorrectas', 'error');
+            }
+        } catch (error) {
+            showAlert('Error de conexión con el servidor', 'error');
+            console.error(error);
+        }
+    });
+
+    function showAlert(message, type) {
+        alertDiv.textContent = message;
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.style.display = 'block';
+
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 3000);
+    }
+</script>
+</body>
+</html>

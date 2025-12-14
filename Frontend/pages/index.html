@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMax - Sistema de Reservas</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🎬 CineMax</div>
+    <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="peliculas.html">Películas</a></li>
+        <li><a href="reservas.html">Reservas</a></li>
+        <li><a href="usuarios.html">Usuarios</a></li>
+        <li><a href="login.html" class="btn-login">Login</a></li>
+    </ul>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>Bienvenido a CineMax</h1>
+    <p>Tu experiencia cinematográfica comienza aquí</p>
+    <a href="peliculas.html" class="cta-button">Ver Cartelera</a>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats">
+    <div class="stat-card">
+        <div class="stat-number" id="totalPeliculas">-</div>
+        <div class="stat-label">Películas Disponibles</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" id="totalReservas">-</div>
+        <div class="stat-label">Reservas Activas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" id="totalUsuarios">-</div>
+        <div class="stat-label">Usuarios Registrados</div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <h2>¿Por qué elegir CineMax?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🎟️</div>
+            <h3>Reservas Fáciles</h3>
+            <p>Sistema de reservas rápido y seguro. Reserva tus boletos en segundos.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎬</div>
+            <h3>Amplia Cartelera</h3>
+            <p>Las mejores películas del momento, actualizadas constantemente.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💳</div>
+            <h3>Pagos Seguros</h3>
+            <p>Procesamiento de pagos seguro y confiable para tu tranquilidad.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>&copy; 2024 CineMax - Sistema de Reservas</p>
+    <p>API Gateway: <code>http://localhost:8080</code></p>
+</footer>
+
+<script src="../assets/js/api.js"></script>
+<script>
+    // Cargar estadísticas al iniciar
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const peliculas = await API.peliculas.getAll();
+            document.getElementById('totalPeliculas').textContent = peliculas.length;
+
+            const reservas = await API.reservas.getAll();
+            document.getElementById('totalReservas').textContent = reservas.length;
+
+            const usuarios = await API.usuarios.getAll();
+            document.getElementById('totalUsuarios').textContent = usuarios.length;
+        } catch (error) {
+            console.error('Error cargando estadísticas:', error);
+        }
+    });
+</script>
+</body>
+</html>
+
