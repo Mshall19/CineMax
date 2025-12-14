@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+  # ========== BASES DE DATOS ==========
+
   # Base de datos 1: USUARIOS y RESERVAS (Puerto 5432)
   db_usuarios:
     image: postgres:14-alpine
@@ -16,6 +18,11 @@ services:
       - db_usuarios_data:/var/lib/postgresql/data
     networks:
       - cinemax-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Base de datos 2: PELICULAS (Puerto 5433)
   db_peliculas:
@@ -30,6 +37,58 @@ services:
       - "5433:5432"
     volumes:
       - db_peliculas_data:/var/lib/postgresql/data
+    networks:
+      - cinemax-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========== MICROSERVICIOS ==========
+
+  # Servicio de Usuarios (Puerto 8081)
+  servicio-usuarios:
+    build:
+      context: ./Microservicios/servicio-usuarios
+      dockerfile: Dockerfile
+    container_name: servicio-usuarios
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      db_usuarios:
+        condition: service_healthy
+    networks:
+      - cinemax-network
+
+  # Servicio de Películas (Puerto 8082)
+  servicio-peliculas:
+    build:
+      context: ./Microservicios/servicio-peliculas
+      dockerfile: Dockerfile
+    container_name: servicio-peliculas
+    restart: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      db_peliculas:
+        condition: service_healthy
+    networks:
+      - cinemax-network
+
+  # Servicio de Reservas (Puerto 8083)
+  servicio-reservas:
+    build:
+      context: ./Microservicios/servicio-reservas
+      dockerfile: Dockerfile
+    container_name: servicio-reservas
+    restart: always
+    ports:
+      - "8083:8083"
+    depends_on:
+      db_usuarios:
+        condition: service_healthy
     networks:
       - cinemax-network
 
