@@ -37,6 +37,25 @@ docker start db_peliculas
 
 ---
 
+## Limpieza y reconstrucción completa del entorno
+
+Dado el caso de que de error al iniciar el docker de error **(esto se debe a que se hayan quedado contenedores o volúmenes colgados)**, usar este script para limpiar y reconstruir todo desde cero:
+> ```bash
+> # Limpieza completa
+> docker-compose down -v
+> docker system prune -a --volumes -f
+> 
+> # Si tienes PostgreSQL local corriendo, detenerlo
+> sudo systemctl stop postgresql
+> 
+> # Verificar que no queden contenedores
+> docker ps -a
+> docker volume ls
+> 
+> # Reconstruir
+> docker-compose up --build
+> ```
+
 ## Verificar contenedores
 
 ```bash
