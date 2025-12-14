@@ -92,6 +92,26 @@ services:
     networks:
       - cinemax-network
 
+  # ========== API GATEWAY ==========
+
+  # API Gateway (Puerto 8080)
+  api-gateway:
+    build:
+      context: ./Microservicios/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - servicio-usuarios
+      - servicio-peliculas
+      - servicio-reservas
+    networks:
+      - cinemax-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
 volumes:
   db_usuarios_data:
   db_peliculas_data:
