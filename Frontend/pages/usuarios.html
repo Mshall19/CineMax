@@ -100,10 +100,11 @@
     async function cargarUsuarios() {
         try {
             usuarios = await API.usuarios.getAll();
+            console.log('Usuarios cargados:', usuarios);
             renderUsuarios();
         } catch (error) {
             console.error('Error cargando usuarios:', error);
-            alert('Error al cargar usuarios');
+            alert('Error al cargar usuarios: ' + error.message);
         }
     }
 
@@ -137,6 +138,7 @@
         } else {
             document.getElementById('modalTitle').textContent = 'Nuevo Usuario';
             form.reset();
+            document.getElementById('usuarioId').value = '';
         }
 
         modal.style.display = 'block';
@@ -158,26 +160,32 @@
 
         const id = document.getElementById('usuarioId').value;
 
+        console.log('Guardando usuario:', usuario);
+
         try {
             if (id) {
-                await API.usuarios.update(id, usuario);
+                const resultado = await API.usuarios.update(id, usuario);
+                console.log('Usuario actualizado:', resultado);
                 alert('Usuario actualizado exitosamente');
             } else {
-                await API.usuarios.create(usuario);
+                const resultado = await API.usuarios.create(usuario);
+                console.log('Usuario creado:', resultado);
                 alert('Usuario creado exitosamente');
             }
 
             closeModal();
-            cargarUsuarios();
+            await cargarUsuarios();
         } catch (error) {
-            console.error('Error guardando usuario:', error);
-            alert('Error al guardar el usuario');
+            console.error('Error completo:', error);
+            alert('Error al guardar el usuario: ' + error.message);
         }
     });
 
     async function editarUsuario(id) {
         const usuario = usuarios.find(u => u.id === id);
-        openModal(usuario);
+        if (usuario) {
+            openModal(usuario);
+        }
     }
 
     async function eliminarUsuario(id) {
@@ -185,10 +193,10 @@
             try {
                 await API.usuarios.delete(id);
                 alert('Usuario eliminado exitosamente');
-                cargarUsuarios();
+                await cargarUsuarios();
             } catch (error) {
                 console.error('Error eliminando usuario:', error);
-                alert('Error al eliminar el usuario');
+                alert('Error al eliminar el usuario: ' + error.message);
             }
         }
     }

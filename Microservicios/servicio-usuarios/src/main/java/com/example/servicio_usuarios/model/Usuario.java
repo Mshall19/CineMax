@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,10 +18,20 @@ public class Usuario {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private String rol;
 
+    // Constructores
     public Usuario() {}
 
+    public Usuario(String email, String password, String nombre, String rol) {
+        this.email = email;
+        this.password = password;
+        this.nombre = nombre;
+        this.rol = rol;
+    }
+
+    // Getters y Setters
     public Long getId() {
         return id;
     }

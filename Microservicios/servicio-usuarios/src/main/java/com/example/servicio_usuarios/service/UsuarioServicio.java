@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Service
 public class UsuarioServicio {
-
     private final UsuarioRepositorio usuarioRepositorio;
 
     public UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
@@ -22,7 +21,6 @@ public class UsuarioServicio {
     public Optional<Usuario> encontrarPorId(Long id) {
         return usuarioRepositorio.findById(id);
     }
-
 
     public Usuario obtenerPorEmail(String email) {
         return usuarioRepositorio.findByEmail(email);
